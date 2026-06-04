@@ -21,7 +21,11 @@ final class UpdateChecker
             return null;
         }
 
-        $response = Http::timeout(5)->acceptJson()->get($feedUrl);
+        try {
+            $response = Http::timeout(5)->acceptJson()->get($feedUrl);
+        } catch (\Throwable) {
+            return null;
+        }
 
         if (! $response->successful()) {
             return null;
