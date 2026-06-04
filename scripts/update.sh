@@ -10,7 +10,7 @@ BACKUP_DIR="${PLTX_BACKUP_DIR:-/var/backups/pltx-theme-update-$(date +%Y%m%d-%H%
 SOURCE_PATH="${PLTX_SOURCE_PATH:-}"
 PACKAGE_NAME="${PLTX_PACKAGE_NAME:-pltx/pterodactyl-theme}"
 
-trap 'log "Update failed, rolling back..."; restore_target "$TARGET_DIR" "$BACKUP_DIR"' ERR
+trap 'log "Update failed at: ${BASH_COMMAND}"; log "Update failed, rolling back..."; restore_target "$TARGET_DIR" "$BACKUP_DIR"' ERR
 
 require_ubuntu
 install_system_dependencies

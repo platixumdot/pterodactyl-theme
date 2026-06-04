@@ -10,7 +10,7 @@ BACKUP_DIR="${PLTX_BACKUP_DIR:-/var/backups/pltx-theme-$(date +%Y%m%d-%H%M%S)}"
 PACKAGE_NAME="${PLTX_PACKAGE_NAME:-pltx/pterodactyl-theme}"
 SOURCE_PATH="${PLTX_SOURCE_PATH:-}"
 
-trap 'log "Install failed, rolling back..."; restore_target "$TARGET_DIR" "$BACKUP_DIR"' ERR
+trap 'log "Install failed at: ${BASH_COMMAND}"; log "Install failed, rolling back..."; restore_target "$TARGET_DIR" "$BACKUP_DIR"' ERR
 
 require_ubuntu
 install_system_dependencies
@@ -21,6 +21,8 @@ require_command composer
 ensure_theme_database "$TARGET_DIR"
 backup_target "$TARGET_DIR" "$BACKUP_DIR"
 backup_database "$TARGET_DIR" "$BACKUP_DIR" || true
+rm -f "$(theme_database_path "$TARGET_DIR")"
+ensure_theme_database "$TARGET_DIR"
 database_ready=0
 if require_database_connection "$TARGET_DIR"; then
     database_ready=1
