@@ -125,8 +125,17 @@ run_artisan() {
 }
 
 restart_services() {
-    systemctl restart php8.3-fpm || true
-    systemctl restart php8.2-fpm || true
+    local php_fpm_unit
+
+    while read -r php_fpm_unit; do
+        [[ -n "$php_fpm_unit" ]] || continue
+        systemctl restart "$php_fpm_unit" || true
+    done < <(systemctl list-unit-files 'php*-fpm.service' --no-legend --no-pager 2>/dev/null | awk '{print $1}' | sort -u)
+
+    if systemctl list-unit-files php-fpm.service --no-legend --no-pager 2>/dev/null | awk 'NR==1 {print $1}' | grep -q '^php-fpm.service$'; then
+        systemctl restart php-fpm || true
+    fi
+
     systemctl restart nginx || true
     systemctl restart redis-server || true
 }
