@@ -44,7 +44,11 @@ install_deps "$TARGET_DIR"
 run_artisan "$TARGET_DIR" vendor:publish --tag=pltx-theme-config --force
 run_artisan "$TARGET_DIR" vendor:publish --tag=pltx-theme-assets --force
 if [[ "$database_ready" -eq 1 ]]; then
-    run_artisan "$TARGET_DIR" migrate --force
+    if [[ -n "$SOURCE_PATH" && -d "$SOURCE_PATH" ]]; then
+        run_artisan "$TARGET_DIR" migrate --database=pltx_theme --path="$SOURCE_PATH/database/migrations" --force
+    else
+        run_artisan "$TARGET_DIR" migrate --database=pltx_theme --path=vendor/pltx/pterodactyl-theme/database/migrations --force
+    fi
 else
     log "Skipping migrations because the database is not available."
 fi
