@@ -9,6 +9,9 @@ TARGET_DIR="${PLTX_PTERO_DIR:-/var/www/pterodactyl}"
 BACKUP_DIR="${PLTX_BACKUP_DIR:-/var/backups/pltx-theme-$(date +%Y%m%d-%H%M%S)}"
 PACKAGE_NAME="${PLTX_PACKAGE_NAME:-pltx/pterodactyl-theme}"
 SOURCE_PATH="${PLTX_SOURCE_PATH:-}"
+if [[ -z "$SOURCE_PATH" && -f "$SCRIPT_DIR/../composer.json" ]]; then
+    SOURCE_PATH="$(cd "$SCRIPT_DIR/.." && pwd)"
+fi
 
 trap 'log "Install failed at: ${BASH_COMMAND}"; log "Install failed, rolling back..."; restore_target "$TARGET_DIR" "$BACKUP_DIR"' ERR
 

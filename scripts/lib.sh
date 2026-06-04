@@ -24,7 +24,7 @@ require_command() {
 install_system_dependencies() {
     export DEBIAN_FRONTEND=noninteractive
     apt-get update
-    apt-get install -y ca-certificates curl git jq unzip rsync composer php-cli php-mbstring php-xml php-curl php-zip php-bcmath php-sqlite3
+    apt-get install -y ca-certificates curl git jq unzip rsync composer php-cli php-mbstring php-xml php-curl php-zip php-bcmath php-sqlite3 php-mysql
 }
 
 backup_target() {
