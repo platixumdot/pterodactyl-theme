@@ -100,7 +100,7 @@ restore_target() {
 check_pterodactyl_version() {
     local target_dir="$1"
     local version
-    version="$(cd "$target_dir" && composer show pterodactyl/panel --no-ansi --no-interaction 2>/dev/null | awk -F': ' '/versions/ {print $2; exit}')"
+    version="$(cd "$target_dir" && composer show pterodactyl/panel --no-ansi --no-interaction 2>/dev/null | awk -F': ' '/versions/ {print $2; exit}')" || true
     if [[ -z "$version" ]]; then
         log "Pterodactyl version could not be detected via composer show; continuing with caution."
         return 0
