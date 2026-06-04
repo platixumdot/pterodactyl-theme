@@ -7,6 +7,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+    protected $connection = 'pltx_theme';
+
     public function up(): void
     {
         Schema::create('pltx_status_entries', function (Blueprint $table): void {

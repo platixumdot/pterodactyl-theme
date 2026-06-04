@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Pltx\Theme\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-final class Ticket extends Model
+final class Ticket extends ThemeModel
 {
     protected $table = 'pltx_tickets';
 

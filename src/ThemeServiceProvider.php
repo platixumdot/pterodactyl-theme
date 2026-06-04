@@ -12,6 +12,15 @@ final class ThemeServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/pltx-theme.php', 'pltx-theme');
+        $databasePath = config('pltx-theme.database.path', storage_path('app/pltx-theme.sqlite'));
+        config([
+            'database.connections.pltx_theme' => [
+                'driver' => 'sqlite',
+                'database' => $databasePath,
+                'prefix' => '',
+                'foreign_key_constraints' => true,
+            ],
+        ]);
     }
 
     public function boot(): void

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Pltx\Theme\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-final class BillingTransaction extends Model
+final class BillingTransaction extends ThemeModel
 {
     protected $table = 'pltx_billing_transactions';
 

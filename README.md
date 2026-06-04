@@ -10,7 +10,7 @@ Modernes Pterodactyl-Theme mit Addon-Struktur für Statusseite, Tickets, Billing
 - Install-, Update- und Uninstall-Skripte enthalten
 
 ## Installation
-Dieses Repository ist als Paket-/Addon-Grundlage aufgebaut. Für ein echtes Pterodactyl-Panel wird das Paket per Composer eingebunden und anschließend mit den bereitgestellten Publish- und Migrations-Kommandos aktiviert.
+Dieses Repository ist als Paket-/Addon-Grundlage aufgebaut. Für ein echtes Pterodactyl-Panel wird das Paket per Composer eingebunden und anschließend mit den bereitgestellten Publish- und Migrations-Kommandos aktiviert. Das Theme speichert seine Daten in einer eigenen SQLite-Datenbank unter `storage/app/pltx-theme.sqlite`.
 
 ## Nächste Schritte
 1. Composer-Abhängigkeiten installieren.

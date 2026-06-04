@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Pltx\Theme\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-final class StatusEntry extends Model
+final class StatusEntry extends ThemeModel
 {
     protected $table = 'pltx_status_entries';
 

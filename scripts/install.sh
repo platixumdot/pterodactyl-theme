@@ -18,6 +18,7 @@ require_command php
 require_command composer
 
 [[ -d "$TARGET_DIR" ]] || fail "Target directory does not exist: $TARGET_DIR"
+ensure_theme_database "$TARGET_DIR"
 backup_target "$TARGET_DIR" "$BACKUP_DIR"
 backup_database "$TARGET_DIR" "$BACKUP_DIR" || true
 database_ready=0

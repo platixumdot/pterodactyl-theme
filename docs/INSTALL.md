@@ -8,6 +8,6 @@
 
 ## Hinweise
 - Das Paket muss auf einem bestehenden Laravel-/Pterodactyl-System betrieben werden.
-- Der Installer benötigt eine erreichbare Pterodactyl-Datenbank; andernfalls bricht die Installation vor den Migrationen mit einer klaren Fehlermeldung ab.
+- Das Theme legt seine eigene SQLite-Datenbank an und benötigt dafür keine erreichbare Pterodactyl-MySQL.
 - Für Discord OAuth2 und Webhooks müssen die Umgebungsvariablen gesetzt werden.
 - Update- und Uninstall-Skripte liegen unter `scripts/`.

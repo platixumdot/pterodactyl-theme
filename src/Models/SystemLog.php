@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Pltx\Theme\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-final class SystemLog extends Model
+final class SystemLog extends ThemeModel
 {
     protected $table = 'pltx_system_logs';
 

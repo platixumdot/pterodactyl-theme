@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Pltx\Theme\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-final class Announcement extends Model
+final class Announcement extends ThemeModel
 {
     protected $table = 'pltx_announcements';
 

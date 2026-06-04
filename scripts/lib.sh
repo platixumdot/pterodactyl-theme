@@ -24,7 +24,7 @@ require_command() {
 install_system_dependencies() {
     export DEBIAN_FRONTEND=noninteractive
     apt-get update
-    apt-get install -y ca-certificates curl git jq unzip rsync composer mysql-client php-cli php-mbstring php-xml php-curl php-zip php-bcmath
+    apt-get install -y ca-certificates curl git jq unzip rsync composer php-cli php-mbstring php-xml php-curl php-zip php-bcmath php-sqlite3
 }
 
 backup_target() {
@@ -34,113 +34,57 @@ backup_target() {
     tar -czf "$backup_dir/files.tar.gz" -C "$target_dir" .
 }
 
-load_env_value() {
-    local env_file="$1"
-    local key="$2"
+require_database_connection() {
+    local target_dir="$1"
 
-    [[ -f "$env_file" ]] || return 1
-    grep -E "^${key}=" "$env_file" | tail -n 1 | cut -d '=' -f 2- | sed 's/^"//; s/"$//' | sed "s/^'//; s/'$//"
+    ensure_theme_database "$target_dir"
+    log "Using dedicated PLTX database at $(theme_database_path "$target_dir")."
+    return 0
 }
 
-resolve_database_value() {
+theme_database_path() {
     local target_dir="$1"
-    local override_key="$2"
-    local env_key="$3"
-    local default_value="$4"
-    local env_file="$target_dir/.env"
-    local override_value
+    local override_value="${PLTX_THEME_DB_PATH:-}"
 
-    override_value="${!override_key:-}"
     if [[ -n "$override_value" ]]; then
         printf '%s' "$override_value"
         return 0
     fi
 
-    if [[ -f "$env_file" ]]; then
-        local env_value
-        env_value="$(load_env_value "$env_file" "$env_key" || true)"
-        if [[ -n "$env_value" ]]; then
-            printf '%s' "$env_value"
-            return 0
-        fi
-    fi
-
-    printf '%s' "$default_value"
+    printf '%s' "$target_dir/storage/app/pltx-theme.sqlite"
 }
 
-database_connection_available() {
-    local db_host="$1"
-    local db_port="$2"
-    local db_username="$3"
-    local db_password="$4"
-
-    MYSQL_PWD="$db_password" mysqladmin ping -h "${db_host:-localhost}" -P "${db_port:-3306}" -u "$db_username" --silent >/dev/null 2>&1
-}
-
-require_database_connection() {
+ensure_theme_database() {
     local target_dir="$1"
-    local db_host db_port db_database db_username db_password
+    local database_path
 
-    db_host="$(resolve_database_value "$target_dir" PLTX_DB_HOST DB_HOST localhost)"
-    db_port="$(resolve_database_value "$target_dir" PLTX_DB_PORT DB_PORT 3306)"
-    db_database="$(resolve_database_value "$target_dir" PLTX_DB_DATABASE DB_DATABASE "")"
-    db_username="$(resolve_database_value "$target_dir" PLTX_DB_USERNAME DB_USERNAME "")"
-    db_password="$(resolve_database_value "$target_dir" PLTX_DB_PASSWORD DB_PASSWORD "")"
-
-    if [[ -z "$db_database" || -z "$db_username" ]]; then
-        log "Database credentials are missing. Skipping database-dependent steps."
-        return 1
-    fi
-
-    if ! database_connection_available "${db_host:-localhost}" "${db_port:-3306}" "$db_username" "$db_password"; then
-        log "MySQL is not reachable at ${db_host:-localhost}:${db_port:-3306}. Skipping database-dependent steps."
-        return 1
-    fi
+    database_path="$(theme_database_path "$target_dir")"
+    mkdir -p "$(dirname "$database_path")"
+    [[ -f "$database_path" ]] || : > "$database_path"
 }
 
 backup_database() {
     local target_dir="$1"
     local backup_dir="$2"
-    local db_host db_port db_database db_username db_password
+    local database_path
 
-    db_host="$(resolve_database_value "$target_dir" PLTX_DB_HOST DB_HOST localhost)"
-    db_port="$(resolve_database_value "$target_dir" PLTX_DB_PORT DB_PORT 3306)"
-    db_database="$(resolve_database_value "$target_dir" PLTX_DB_DATABASE DB_DATABASE "")"
-    db_username="$(resolve_database_value "$target_dir" PLTX_DB_USERNAME DB_USERNAME "")"
-    db_password="$(resolve_database_value "$target_dir" PLTX_DB_PASSWORD DB_PASSWORD "")"
-
-    if [[ -n "$db_database" && -n "$db_username" ]]; then
-        if ! database_connection_available "${db_host:-localhost}" "${db_port:-3306}" "$db_username" "$db_password"; then
-            log "Database backup skipped because the MySQL server is not reachable."
-            return 0
-        fi
-
+    database_path="$(theme_database_path "$target_dir")"
+    if [[ -f "$database_path" ]]; then
         mkdir -p "$backup_dir"
-        MYSQL_PWD="$db_password" mysqldump --single-transaction --routines --triggers -h "${db_host:-localhost}" -P "${db_port:-3306}" -u "$db_username" "$db_database" > "$backup_dir/database.sql"
+        cp "$database_path" "$backup_dir/database.sqlite"
     fi
 }
 
 restore_database() {
     local target_dir="$1"
     local backup_dir="$2"
-    local db_host db_port db_database db_username db_password
+    local database_path
 
-    [[ -f "$backup_dir/database.sql" ]] || return 0
+    [[ -f "$backup_dir/database.sqlite" ]] || return 0
 
-    db_host="$(resolve_database_value "$target_dir" PLTX_DB_HOST DB_HOST localhost)"
-    db_port="$(resolve_database_value "$target_dir" PLTX_DB_PORT DB_PORT 3306)"
-    db_database="$(resolve_database_value "$target_dir" PLTX_DB_DATABASE DB_DATABASE "")"
-    db_username="$(resolve_database_value "$target_dir" PLTX_DB_USERNAME DB_USERNAME "")"
-    db_password="$(resolve_database_value "$target_dir" PLTX_DB_PASSWORD DB_PASSWORD "")"
-
-    if [[ -n "$db_database" && -n "$db_username" ]]; then
-        if ! database_connection_available "${db_host:-localhost}" "${db_port:-3306}" "$db_username" "$db_password"; then
-            log "Database restore skipped because the MySQL server is not reachable."
-            return 0
-        fi
-
-        MYSQL_PWD="$db_password" mysql -h "${db_host:-localhost}" -P "${db_port:-3306}" -u "$db_username" "$db_database" < "$backup_dir/database.sql"
-    fi
+    database_path="$(theme_database_path "$target_dir")"
+    mkdir -p "$(dirname "$database_path")"
+    cp "$backup_dir/database.sqlite" "$database_path"
 }
 
 restore_target() {
