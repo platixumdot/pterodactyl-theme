@@ -25,11 +25,14 @@ final class ThemeServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
-        $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'pltx-theme');
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'pltx-theme');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        if (config('pltx-theme.routes.enabled', true)) {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+            $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+        }
 
         Paginator::useBootstrapFive();
 

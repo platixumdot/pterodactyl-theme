@@ -33,6 +33,10 @@ return [
         'prefix' => 'api/theme',
         'rate_limit' => '120,1',
     ],
+    'routes' => [
+        'enabled' => env('PLTX_THEME_REGISTER_ROUTES', true),
+        'web_prefix' => env('PLTX_THEME_WEB_PREFIX', 'theme'),
+    ],
     'updates' => [
         'feed_url' => env('PLTX_THEME_UPDATE_FEED_URL'),
     ],
