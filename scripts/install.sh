@@ -34,7 +34,7 @@ check_pterodactyl_version "$TARGET_DIR"
 
 if [[ -n "$SOURCE_PATH" && -d "$SOURCE_PATH" ]]; then
     log "Installing from local source path: $SOURCE_PATH"
-    (cd "$TARGET_DIR" && composer config repositories.pltx-theme "{\"type\":\"path\",\"url\":\"$SOURCE_PATH\",\"options\":{\"versions\":{\"$PACKAGE_NAME\":\"1.0.0\"}}}" && composer require "$PACKAGE_NAME:*" --no-interaction)
+    (cd "$TARGET_DIR" && composer config repositories.pltx-theme "{\"type\":\"path\",\"url\":\"$SOURCE_PATH\",\"options\":{\"versions\":{\"$PACKAGE_NAME\":\"1.0.0\"},\"symlink\":false}}" && composer require "$PACKAGE_NAME:*" --no-interaction)
 else
     log "Installing package: $PACKAGE_NAME"
     (cd "$TARGET_DIR" && composer require "$PACKAGE_NAME:*" --no-interaction)
