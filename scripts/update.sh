@@ -31,7 +31,7 @@ fi
 check_pterodactyl_version "$TARGET_DIR"
 
 if [[ -n "$SOURCE_PATH" && -d "$SOURCE_PATH" ]]; then
-    (cd "$TARGET_DIR" && composer config repositories.pltx-theme path "$SOURCE_PATH" && composer update "$PACKAGE_NAME" --no-interaction)
+    (cd "$TARGET_DIR" && composer config repositories.pltx-theme "{\"type\":\"path\",\"url\":\"$SOURCE_PATH\",\"options\":{\"versions\":{\"$PACKAGE_NAME\":\"1.0.0\"}}}" && composer update "$PACKAGE_NAME" --no-interaction)
 else
     (cd "$TARGET_DIR" && composer update "$PACKAGE_NAME" --no-interaction)
 fi
