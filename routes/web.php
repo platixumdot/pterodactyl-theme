@@ -33,5 +33,4 @@ Route::prefix(config('pltx-theme.routes.web_prefix', 'theme'))
             Route::get('/redirect', [DiscordAuthController::class, 'redirect'])->name('redirect');
             Route::get('/callback', [DiscordAuthController::class, 'callback'])->name('callback');
         });
-    });
 });
