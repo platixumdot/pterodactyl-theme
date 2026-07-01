@@ -44,7 +44,7 @@ Das Theme ist als update-freundliches Laravel-Paket gebaut: alle Daten landen in
 Der schnellste Weg auf einem produktiven Panel-Server ist das mitgelieferte Installer-Skript. Es übernimmt Composer-Einbindung, Konfiguration, Migrationen, Assets und einen Service-Neustart in einem Rutsch:
 
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/maxytmaxyt/pterodactyl-theme/main/scripts/install.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/platixumdot/pterodactyl-theme/main/scripts/install.sh)
 ```
 
 Das Skript legt vor jeder Änderung automatisch ein Backup an und macht bei einem Fehler alles rückgängig (siehe [Installer-Skripte](#installer-skripte)).
