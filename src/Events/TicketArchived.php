@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Pltx\Theme\Events;
+
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+use Pltx\Theme\Models\Ticket;
+
+final class TicketArchived
+{
+    use Dispatchable, SerializesModels;
+
+    public function __construct(public readonly Ticket $ticket) {}
+}

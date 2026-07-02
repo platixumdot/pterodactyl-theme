@@ -2,12 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Pltx\Theme\Http\Controllers\Auth\DiscordAuthController;
-use Pltx\Theme\Http\Controllers\AdminController;
-use Pltx\Theme\Http\Controllers\BillingController;
-use Pltx\Theme\Http\Controllers\ProfileController;
-use Pltx\Theme\Http\Controllers\ServerController;
-use Pltx\Theme\Http\Controllers\StatusController;
-use Pltx\Theme\Http\Controllers\TicketController;
+use Pltx\Theme\Http\Controllers\Admin\AdminController;
+use Pltx\Theme\Http\Controllers\Billing\BillingController;
+use Pltx\Theme\Http\Controllers\Profile\ProfileController;
+use Pltx\Theme\Http\Controllers\Server\ServerController;
+use Pltx\Theme\Http\Controllers\Status\StatusController;
+use Pltx\Theme\Http\Controllers\Ticket\TicketController;
 
 Route::prefix(config('pltx-theme.routes.web_prefix', 'theme'))
     ->middleware(['web'])
@@ -19,11 +19,13 @@ Route::prefix(config('pltx-theme.routes.web_prefix', 'theme'))
 
         Route::get('/status', [StatusController::class, 'index'])->name('theme.status');
         Route::get('/status/incidents', [StatusController::class, 'incidents'])->name('theme.status.incidents');
+
         Route::get('/tickets', [TicketController::class, 'index'])->name('theme.tickets.index');
         Route::post('/tickets', [TicketController::class, 'store'])->name('theme.tickets.store');
         Route::post('/tickets/{ticket}/close', [TicketController::class, 'close'])->name('theme.tickets.close');
         Route::post('/tickets/{ticket}/archive', [TicketController::class, 'archive'])->name('theme.tickets.archive');
         Route::post('/tickets/{ticket}/notes', [TicketController::class, 'note'])->name('theme.tickets.note');
+
         Route::get('/billing', [BillingController::class, 'index'])->name('theme.billing.index');
         Route::get('/profile', [ProfileController::class, 'show'])->name('theme.profile.show');
         Route::get('/servers/{server}', [ServerController::class, 'show'])->name('theme.servers.show');
@@ -33,4 +35,4 @@ Route::prefix(config('pltx-theme.routes.web_prefix', 'theme'))
             Route::get('/redirect', [DiscordAuthController::class, 'redirect'])->name('redirect');
             Route::get('/callback', [DiscordAuthController::class, 'callback'])->name('callback');
         });
-});
+    });
