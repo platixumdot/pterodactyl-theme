@@ -339,3 +339,121 @@ th { color: var(--muted); font-size: 0.86rem; font-weight: 600; }
     .card-grid { gap: 14px; }
     .sidebar-footer { grid-template-columns: 1fr; }
 }
+
+/* ================================================================
+   Pterodactyl Panel Overrides
+   Injected via InjectThemeCss middleware into every panel response.
+   Targets Pterodactyl 1.12.x (React + Tailwind CSS).
+   ================================================================ */
+
+/* ---------- Base ---------- */
+body,
+html {
+    font-family: 'Inter', 'Segoe UI', sans-serif !important;
+    background-color: #0c0c0c !important;
+    color: #f4f7fb !important;
+}
+
+/* ---------- Tailwind background overrides ---------- */
+.bg-neutral-900, .bg-gray-900 { background-color: #0c0c0c !important; }
+.bg-neutral-800, .bg-gray-800 { background-color: #111111 !important; }
+.bg-neutral-700, .bg-gray-700 { background-color: #161616 !important; }
+.bg-neutral-600, .bg-gray-600 { background-color: #1e1e1e !important; }
+.bg-neutral-100, .bg-gray-100 { background-color: rgba(255, 255, 255, 0.06) !important; }
+.bg-neutral-200, .bg-gray-200 { background-color: rgba(255, 255, 255, 0.08) !important; }
+
+/* ---------- Tailwind text overrides ---------- */
+.text-neutral-100, .text-gray-100, .text-white { color: #f4f7fb !important; }
+.text-neutral-200, .text-gray-200 { color: #e2e8f0 !important; }
+.text-neutral-300, .text-gray-300 { color: #cbd5e1 !important; }
+.text-neutral-400, .text-gray-400,
+.text-neutral-500, .text-gray-500 { color: #98a2b3 !important; }
+
+/* ---------- Accent / primary ---------- */
+.text-blue-400, .text-blue-500 { color: #3b82f6 !important; }
+.text-blue-600 { color: #2563eb !important; }
+.bg-blue-500, .bg-blue-600 { background-color: #2563eb !important; }
+.bg-blue-700 { background-color: #1d4ed8 !important; }
+.hover\:bg-blue-700:hover { background-color: #1d4ed8 !important; }
+
+/* ---------- Borders ---------- */
+.border-neutral-600, .border-neutral-700, .border-neutral-800,
+.border-gray-600, .border-gray-700, .border-gray-800 {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ---------- Navigation ---------- */
+nav,
+header[class*="Navigation"],
+header[class*="navigation"],
+div[class*="NavigationBar"],
+div[class*="navigation-bar"] {
+    background: rgba(8, 8, 8, 0.97) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    font-family: 'Inter', 'Segoe UI', sans-serif !important;
+}
+
+/* ---------- SubNavigation / Sidebar ---------- */
+aside,
+div[class*="SubNavigation"],
+div[class*="sub-navigation"],
+div[class*="Sidebar"],
+div[class*="sidebar"] {
+    background: rgba(10, 10, 10, 0.96) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+}
+
+/* ---------- Content containers ---------- */
+div[class*="ContentContainer"],
+div[class*="content-container"] {
+    background: transparent !important;
+}
+
+/* ---------- Inputs ---------- */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+select,
+textarea {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.10) !important;
+    color: #f4f7fb !important;
+    font-family: 'Inter', 'Segoe UI', sans-serif !important;
+}
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: rgba(59, 130, 246, 0.50) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12) !important;
+    outline: none !important;
+}
+
+/* ---------- Buttons ---------- */
+button,
+[role="button"] {
+    font-family: 'Inter', 'Segoe UI', sans-serif !important;
+    transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease !important;
+}
+button.bg-blue-600:hover,
+button.bg-blue-500:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.30) !important;
+}
+
+/* ---------- Code / Terminal ---------- */
+pre, code,
+[class*="terminal"],
+[class*="console"],
+[class*="xterm"] {
+    background: #080808 !important;
+    border-color: rgba(255, 255, 255, 0.07) !important;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace !important;
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0c0c0c; }
+::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.35); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.55); }
