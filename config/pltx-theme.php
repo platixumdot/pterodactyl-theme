@@ -22,6 +22,10 @@ return [
         'discord_oauth' => true,
         'webhooks' => true,
         'realtime_updates' => true,
+        // Lightweight Mode: disables animations, backdrop-filter, gradients,
+        // Google Fonts and background polling to reduce RAM/CPU usage.
+        // Can be toggled per-user in the topbar as well.
+        'lightweight_mode' => env('PLTX_LIGHTWEIGHT_MODE', false),
     ],
     'discord' => [
         'client_id' => env('DISCORD_CLIENT_ID'),

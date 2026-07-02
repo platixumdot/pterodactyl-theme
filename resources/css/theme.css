@@ -457,3 +457,94 @@ pre, code,
 ::-webkit-scrollbar-track { background: #0c0c0c; }
 ::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.35); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.55); }
+
+/* ================================================================
+   Lightweight Mode
+   Activated via data-lightweight="true" on <html>.
+   Disables animations, backdrop-filter, gradients, shadows and
+   font loading to reduce RAM, CPU and network usage.
+   ================================================================ */
+
+/* Kill all animations and transitions */
+[data-lightweight="true"] *,
+[data-lightweight="true"] *::before,
+[data-lightweight="true"] *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+}
+
+/* Remove decorative background layers */
+[data-lightweight="true"] .theme-bg,
+[data-lightweight="true"] .theme-grid {
+    display: none !important;
+}
+
+/* Flat body background — no expensive radial gradients */
+[data-lightweight="true"] body {
+    background: #0c0c0c !important;
+}
+
+/* Remove backdrop-filter (one of the most expensive CSS properties) */
+[data-lightweight="true"] .sidebar,
+[data-lightweight="true"] nav,
+[data-lightweight="true"] .topbar,
+[data-lightweight="true"] .hero-panel,
+[data-lightweight="true"] .glass-card,
+[data-lightweight="true"] .table-card,
+[data-lightweight="true"] .auth-card,
+[data-lightweight="true"] .error-screen {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Flat backgrounds instead of translucent */
+[data-lightweight="true"] .sidebar { background: #0e0e0e !important; }
+[data-lightweight="true"] nav      { background: #0a0a0a !important; }
+[data-lightweight="true"] .topbar  { background: #0e0e0e !important; }
+[data-lightweight="true"] .hero-panel,
+[data-lightweight="true"] .glass-card,
+[data-lightweight="true"] .table-card,
+[data-lightweight="true"] .auth-card,
+[data-lightweight="true"] .error-screen { background: #111111 !important; }
+
+/* Remove box-shadows */
+[data-lightweight="true"] .hero-panel,
+[data-lightweight="true"] .glass-card,
+[data-lightweight="true"] .table-card,
+[data-lightweight="true"] .auth-card,
+[data-lightweight="true"] .error-screen,
+[data-lightweight="true"] .primary-button,
+[data-lightweight="true"] .brand-mark,
+[data-lightweight="true"] .metric-card {
+    box-shadow: none !important;
+}
+
+/* Flat brand mark — no gradient */
+[data-lightweight="true"] .brand-mark {
+    background: #2563eb !important;
+}
+
+/* Flat primary button — no gradient */
+[data-lightweight="true"] .primary-button {
+    background: #2563eb !important;
+}
+
+/* System fonts — no external font loading */
+[data-lightweight="true"],
+[data-lightweight="true"] * {
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif !important;
+}
+
+/* Lightweight mode indicator in topbar button */
+.lw-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+}
+[data-lightweight="true"] .lw-toggle-btn {
+    border-color: rgba(59, 130, 246, 0.45) !important;
+    color: #3b82f6 !important;
+}
