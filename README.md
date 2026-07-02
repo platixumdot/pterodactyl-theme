@@ -171,7 +171,7 @@ Kurzüberblick, ausführlich in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md):
 | Installer bricht mit „This installer only supports Ubuntu“ ab | Skripte funktionieren nur auf Ubuntu/Ubuntu-basierten Systemen, andere OS benötigen die [manuelle Installation](#manuelle-installation) |
 | „Unsupported Pterodactyl version detected“ | Aktuell wird nur Pterodactyl `1.12.x` unterstützt |
 | Migrationen werden übersprungen | Die Theme-Datenbank konnte nicht erstellt/erreicht werden – Pfad in `PLTX_THEME_DB_PATH` prüfen |
-| Nach einem fehlgeschlagenen Install/Update ist alles beim Alten | Gewollt: Bei einem Fehler stellen die Skripte automatisch das Backup aus `PLTX_BACKUP_DIR` wieder her |
+| Nach einem fehlgeschlagenen Install/Update ist alles beim Alten | Gewollt: Bei einem Fehler stellen die Skripte automatisch das Backup aus `PLTX_BACKUP_DIR` wieder her  |
 | Discord-Login funktioniert nicht | `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET` und die Redirect-URL im Discord-Developer-Portal prüfen |
 
 ## Weiterführende Doku
@@ -180,3 +180,4 @@ Kurzüberblick, ausführlich in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md):
 - [`docs/ENV.md`](docs/ENV.md) – alle Umgebungsvariablen im Detail
 - [`docs/API.md`](docs/API.md) – REST-API-Referenz
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) – Architektur und Sicherheitsprinzipien
+

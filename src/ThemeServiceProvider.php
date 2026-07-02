@@ -6,6 +6,7 @@ namespace Pltx\Theme;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
+use Pltx\Theme\Http\Middleware\InjectThemeCss;
 
 final class ThemeServiceProvider extends ServiceProvider
 {
@@ -33,6 +34,9 @@ final class ThemeServiceProvider extends ServiceProvider
             $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
             $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
         }
+
+        // Inject theme CSS + JS into ALL HTML responses, including Pterodactyl's own pages.
+        $this->app['router']->pushMiddlewareToGroup('web', InjectThemeCss::class);
 
         Paginator::useBootstrapFive();
 
