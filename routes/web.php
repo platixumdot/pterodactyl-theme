@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Pltx\Theme\Http\Controllers\Auth\DiscordAuthController;
 use Pltx\Theme\Http\Controllers\Admin\AdminController;
+use Pltx\Theme\Http\Controllers\Admin\ThemeEditorController;
 use Pltx\Theme\Http\Controllers\Billing\BillingController;
 use Pltx\Theme\Http\Controllers\Profile\ProfileController;
 use Pltx\Theme\Http\Controllers\Server\ServerController;
@@ -30,6 +31,19 @@ Route::prefix(config('pltx-theme.routes.web_prefix', 'theme'))
         Route::get('/profile', [ProfileController::class, 'show'])->name('theme.profile.show');
         Route::get('/servers/{server}', [ServerController::class, 'show'])->name('theme.servers.show');
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('theme.admin.dashboard');
+
+        // Theme Editor
+        Route::prefix('admin/editor')->name('theme.admin.editor')->group(function (): void {
+            Route::get('/', [ThemeEditorController::class, 'index'])->name('');
+            Route::patch('/', [ThemeEditorController::class, 'update'])->name('.update');
+            Route::delete('/reset', [ThemeEditorController::class, 'reset'])->name('.reset');
+            Route::get('/export', [ThemeEditorController::class, 'exportJson'])->name('.export');
+            Route::post('/import', [ThemeEditorController::class, 'importJson'])->name('.import');
+            Route::post('/preview', [ThemeEditorController::class, 'preview'])->name('.preview');
+        });
+
+        // Dynamic theme CSS (served by PHP so the editor changes take effect immediately)
+        Route::get('/dynamic.css', [ThemeEditorController::class, 'dynamicCss'])->name('theme.dynamic.css');
 
         Route::prefix('auth/discord')->name('theme.auth.discord.')->group(function (): void {
             Route::get('/redirect', [DiscordAuthController::class, 'redirect'])->name('redirect');
