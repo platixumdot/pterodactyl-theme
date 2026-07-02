@@ -15,6 +15,7 @@
 | `PLTX_THEME_DB_CONNECTION` | `pltx_theme` | Name der Laravel-DB-Connection für das Theme |
 | `PLTX_THEME_REGISTER_ROUTES` | `true` | Theme-Routen aktivieren/deaktivieren |
 | `PLTX_THEME_WEB_PREFIX` | `theme` | URL-Prefix der Theme-Seiten |
+| `PLTX_LIGHTWEIGHT_MODE` | `false` | Lightweight Mode – deaktiviert Animationen, Backdrop-Filter, Gradienten, Google Fonts und Live-Polling |
 
 ## Betrieb
 

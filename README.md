@@ -29,6 +29,7 @@ Modernes, dunkles Pterodactyl-Theme mit Addon-Struktur. Bringt Statusseite, Tick
 | Discord-OAuth | Login über Discord |
 | Webhooks | Discord-Webhook-Benachrichtigungen |
 | REST-API | Eigene Endpunkte unter `/api/theme/*` |
+| Lightweight Mode | Deaktiviert Animationen, Backdrop-Filter, Gradienten, Google Fonts und Hintergrund-Polling – für schwache VPS/Server |
 
 Das Theme ist als update-freundliches Laravel-Paket gebaut: alle Daten landen in einer **eigenen SQLite-Datenbank**, getrennt von der Pterodactyl-MySQL. Dadurch übersteht das Theme auch Panel-Updates, ohne dass Core-Dateien überschrieben werden müssen.
 
@@ -163,6 +164,29 @@ Kurzüberblick, ausführlich in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md):
 - Veröffentlichbare Assets unter `public/vendor/pltx-theme`.
 - Blade-Views mit dunklem, responsivem Layout.
 - Sicherheitsprinzipien: Blade-Escaping als Standard, serverseitige Validierung, Sanitizing von Text-/HTML-Inhalten.
+
+## Lightweight Mode
+
+Für schwache VPS oder Server mit wenig RAM/CPU gibt es den Lightweight Mode. Er deaktiviert alle ressourcenintensiven Features:
+
+| Was wird deaktiviert | Warum |
+|---|---|
+| CSS-Animationen & Transitions | Entlasten CPU/GPU |
+| `backdrop-filter: blur()` | Einer der teuersten CSS-Effekte |
+| Radiale Hintergrundgradienten | Entlasten Rendering-Pipeline |
+| Box-Shadows | Entlasten Compositing |
+| Google Fonts (Netzwerk-Request) | Spart Ladezeit und Verbindungsaufwand |
+| Live-Polling alle 30 s | Spart Hintergrund-CPU und Netzwerk |
+
+**Aktivieren per `.env` (server-weit):**
+```env
+PLTX_LIGHTWEIGHT_MODE=true
+```
+
+**Aktivieren per Topbar-Toggle (pro Nutzer):**  
+Im Panel oben rechts erscheint ein ⚡-Button. Der Klick speichert die Einstellung im `localStorage` des Browsers und überschreibt das Server-Default.
+
+Die Einstellung im `localStorage` hat immer Vorrang vor dem Server-Default.
 
 ## Troubleshooting
 
