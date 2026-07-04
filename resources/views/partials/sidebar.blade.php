@@ -1,47 +1,62 @@
-<aside class="sidebar">
+<nav class="sidebar" aria-label="Hauptnavigation">
     <div class="brand-block">
         <div class="brand-mark">P</div>
-        <div>
-            <div class="brand-name">{{ config('pltx-theme.brand.name', 'PLTX Theme') }}</div>
-            <div class="brand-subtitle">Pterodactyl Dashboard</div>
-        </div>
+        <span class="brand-name">{{ config('pltx-theme.brand.name', 'PLTX') }}</span>
     </div>
 
-    <nav class="nav-stack">
-        <a href="{{ route('theme.home') }}" class="nav-link">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-4.5v-6.5h-5V21H5a1 1 0 0 1-1-1z"/></svg>
+    <div class="nav-section">
+        <div class="nav-label">Allgemein</div>
+        <a href="{{ route('theme.home') }}" class="nav-link {{ request()->routeIs('theme.home') ? 'active' : '' }}">
+            @include('pltx-theme::partials.sidebar-icons', ['icon' => 'dashboard'])
             Dashboard
         </a>
-        <a href="{{ route('theme.status') }}" class="nav-link">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h4l2-4 3 8 2-4h5"/></svg>
-            Status
-        </a>
-        <a href="{{ route('theme.tickets.index') }}" class="nav-link">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4z"/></svg>
-            Tickets
-        </a>
-        <a href="{{ route('theme.billing.index') }}" class="nav-link">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z"/><path d="M9 10h6M9 14h4"/></svg>
-            Billing
-        </a>
-        <a href="{{ route('theme.profile.show') }}" class="nav-link">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-7 9a7 7 0 0 1 14 0"/></svg>
+        <a href="{{ route('theme.profile.show') }}" class="nav-link {{ request()->routeIs('theme.profile.*') ? 'active' : '' }}">
+            @include('pltx-theme::partials.sidebar-icons', ['icon' => 'profile'])
             Profil
         </a>
-        <a href="{{ route('theme.admin.dashboard') }}" class="nav-link nav-link-accent">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v5c0 5 3.5 8.6 8 9 4.5-.4 8-4 8-9V7z"/><path d="m9 12 2 2 4-4"/></svg>
-            Admin
-        </a>
-    </nav>
-
-    <div class="sidebar-footer">
-        <div class="mini-stat">
-            <span>Theme</span>
-            <strong>v1.0</strong>
-        </div>
-        <div class="mini-stat">
-            <span>Mode</span>
-            <strong id="theme-label">Dark</strong>
-        </div>
     </div>
-</aside>
+
+    @if(config('pltx-theme.features.tickets', true))
+    <div class="nav-section">
+        <div class="nav-label">Support</div>
+        <a href="{{ route('theme.tickets.index') }}" class="nav-link {{ request()->routeIs('theme.tickets.*') ? 'active' : '' }}">
+            @include('pltx-theme::partials.sidebar-icons', ['icon' => 'ticket'])
+            Tickets
+        </a>
+    </div>
+    @endif
+
+    @if(config('pltx-theme.features.billing', true))
+    <div class="nav-section">
+        <div class="nav-label">Abrechnung</div>
+        <a href="{{ route('theme.billing.index') }}" class="nav-link {{ request()->routeIs('theme.billing.*') ? 'active' : '' }}">
+            @include('pltx-theme::partials.sidebar-icons', ['icon' => 'billing'])
+            Abrechnung
+        </a>
+    </div>
+    @endif
+
+    @if(config('pltx-theme.features.status_page', true))
+    <div class="nav-section">
+        <div class="nav-label">System</div>
+        <a href="{{ route('theme.status') }}" class="nav-link {{ request()->routeIs('theme.status*') ? 'active' : '' }}">
+            @include('pltx-theme::partials.sidebar-icons', ['icon' => 'status'])
+            Status
+        </a>
+    </div>
+    @endif
+
+    @if(config('pltx-theme.features.admin_system', true))
+    <div class="nav-section">
+        <div class="nav-label">Admin</div>
+        <a href="{{ route('theme.admin.dashboard') }}" class="nav-link {{ request()->routeIs('theme.admin.dashboard') ? 'active' : '' }}">
+            @include('pltx-theme::partials.sidebar-icons', ['icon' => 'admin'])
+            Übersicht
+        </a>
+        <a href="{{ route('theme.admin.editor') }}" class="nav-link {{ request()->routeIs('theme.admin.editor*') ? 'active' : '' }}">
+            @include('pltx-theme::partials.sidebar-icons', ['icon' => 'editor'])
+            Theme Editor
+        </a>
+    </div>
+    @endif
+</nav>

@@ -1,16 +1,30 @@
 <header class="topbar">
-    <div>
-        <p class="eyebrow">Modern Pterodactyl Theme</p>
-        <h1>@yield('page-title', 'Dashboard')</h1>
+    <div class="d-flex align-center gap-8">
+        <button class="pltx-btn pltx-btn--ghost pltx-btn--sm" data-sidebar-toggle aria-label="Sidebar umschalten">☰</button>
+        <span class="topbar-title">@yield('title', config('pltx-theme.brand.name', 'PLTX Theme'))</span>
     </div>
-    <div class="topbar-actions">
-        @include('pltx-theme::partials.theme-toggle')
-        <button class="ghost-button lw-toggle-btn" data-lightweight-toggle title="Lightweight Mode umschalten" aria-label="Lightweight Mode umschalten">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>
-            </svg>
-            <span id="lw-label">Off</span>
+
+    <div class="d-flex align-center gap-8">
+        {{-- Live status indicator --}}
+        @if(config('pltx-theme.features.status_page', true))
+        <span style="font-size:12px; color:var(--pltx-text-muted);">
+            Status: <strong data-live-status>—</strong>
+        </span>
+        @endif
+
+        {{-- Update badge --}}
+        <span style="font-size:12px; color:var(--pltx-text-muted);">
+            <span data-live-update></span>
+        </span>
+
+        {{-- Lightweight toggle --}}
+        <button class="pltx-btn pltx-btn--ghost pltx-btn--sm" data-lightweight-toggle title="Leichtgewichtsmodus">
+            ⚡ <span data-lw-label>Off</span>
         </button>
-        <a class="primary-button" href="{{ route('theme.login') }}">Login</a>
+
+        {{-- Dark/light toggle --}}
+        <button class="pltx-btn pltx-btn--ghost pltx-btn--sm" data-theme-toggle title="Farbschema">
+            🌙 <span data-theme-label>Dark</span>
+        </button>
     </div>
 </header>

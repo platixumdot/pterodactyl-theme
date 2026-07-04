@@ -1,36 +1,39 @@
 @extends('pltx-theme::layouts.app')
 
-@section('page-title', 'Dashboard')
+@section('title', 'Dashboard')
 
 @section('content')
-    <section class="hero-panel">
-        <div>
-            <p class="eyebrow">Hosting Control Center</p>
-            <h2>Schwarz, Blau und präzise konstruierte Bedienoberflächen.</h2>
-            <p class="hero-copy">Statusseite, Tickets, Billing, Profile und Admin-Module in einer update-freundlichen Laravel-Struktur für Pterodactyl.</p>
-        </div>
-        <div class="hero-stats">
-            <div class="metric-card"><span>Panel</span><strong data-live-status>Operational</strong></div>
-            <div class="metric-card"><span>Nodes</span><strong>12</strong></div>
-            <div class="metric-card"><span>Updates</span><strong data-live-update>Current</strong></div>
-        </div>
-    </section>
+<div class="page-header">
+    <h2>Dashboard</h2>
+    <p>Willkommen zurück im PLTX Theme Panel.</p>
+</div>
 
-    <section class="card-grid">
-        <article class="glass-card">
-            <span class="card-kicker">Statusseite</span>
-            <h3>Panel, Node, DB und Netzwerk</h3>
-            <p>Öffentliche Statusübersicht mit Incident-Historie und Wartungsfenstern.</p>
-        </article>
-        <article class="glass-card">
-            <span class="card-kicker">Tickets</span>
-            <h3>Kategorien, Prioritäten, Archiv</h3>
-            <p>Support-Workflow mit internen Notizen, Anhängen und schneller Suche.</p>
-        </article>
-        <article class="glass-card">
-            <span class="card-kicker">Billing</span>
-            <h3>Guthaben, Rechnungen, Gutscheine</h3>
-            <p>Stripe- und PayPal-fähige Struktur für Transaktionen und Abrechnung.</p>
-        </article>
-    </section>
+<div class="card-grid">
+    @if(config('pltx-theme.features.tickets', true))
+    <div class="glass-card">
+        <div class="card-kicker">Support</div>
+        <h3 style="margin:8px 0 4px; font-size:28px; font-weight:800;">—</h3>
+        <p class="text-muted" style="margin:0; font-size:13px;">Offene Tickets</p>
+        <a href="{{ route('theme.tickets.index') }}" class="pltx-btn pltx-btn--ghost pltx-btn--sm" style="margin-top:14px;">Tickets →</a>
+    </div>
+    @endif
+
+    @if(config('pltx-theme.features.status_page', true))
+    <div class="glass-card">
+        <div class="card-kicker">Systemstatus</div>
+        <h3 style="margin:8px 0 4px; font-size:28px; font-weight:800;" data-live-status>—</h3>
+        <p class="text-muted" style="margin:0; font-size:13px;">Aktueller Status</p>
+        <a href="{{ route('theme.status') }}" class="pltx-btn pltx-btn--ghost pltx-btn--sm" style="margin-top:14px;">Status →</a>
+    </div>
+    @endif
+
+    @if(config('pltx-theme.features.billing', true))
+    <div class="glass-card">
+        <div class="card-kicker">Abrechnung</div>
+        <h3 style="margin:8px 0 4px; font-size:28px; font-weight:800;">—</h3>
+        <p class="text-muted" style="margin:0; font-size:13px;">Kontostand</p>
+        <a href="{{ route('theme.billing.index') }}" class="pltx-btn pltx-btn--ghost pltx-btn--sm" style="margin-top:14px;">Billing →</a>
+    </div>
+    @endif
+</div>
 @endsection
