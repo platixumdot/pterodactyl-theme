@@ -1,10 +1,12 @@
 @extends('pltx-theme::layouts.guest')
 
+@section('title', '404 – Nicht gefunden')
+
 @section('content')
-    <div class="error-screen">
-        <p class="eyebrow">404</p>
-        <h1>Seite nicht gefunden</h1>
-        <p>Die angeforderte Route existiert nicht oder wurde verschoben.</p>
-        <a class="primary-button" href="{{ route('theme.home') }}">Zurück zum Dashboard</a>
-    </div>
+<div class="error-screen">
+    <h1>404</h1>
+    <p style="font-size:18px; font-weight:600; margin-bottom:8px;">Seite nicht gefunden</p>
+    <p class="text-muted" style="margin-bottom:24px;">Die angeforderte Seite existiert nicht.</p>
+    <a href="{{ route('theme.home') }}" class="pltx-btn pltx-btn--primary">← Zurück zum Dashboard</a>
+</div>
 @endsection

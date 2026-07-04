@@ -1,80 +1,76 @@
+/* PLTX Theme JS */
 (() => {
+    'use strict';
     const root = document.documentElement;
 
-    // ── Theme (dark / light) ────────────────────────────────────────
-    const themeLabel = document.getElementById('theme-label');
-    const storedTheme = localStorage.getItem('pltx-theme-mode');
-    const preferredTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-
-    const applyTheme = (theme) => {
-        root.setAttribute('data-theme', theme);
-        if (themeLabel) themeLabel.textContent = theme === 'light' ? 'Light' : 'Dark';
-        localStorage.setItem('pltx-theme-mode', theme);
-    };
-
-    applyTheme(storedTheme || preferredTheme);
-
-    document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    // ── Dark/Light toggle ──────────────────────────────────────────
+    const stored = localStorage.getItem('pltx-theme-mode');
+    const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    const applyTheme = (t) => {
+        root.setAttribute('data-theme', t);
+        localStorage.setItem('pltx-theme-mode', t);
+        document.querySelectorAll('[data-theme-label]').forEach(el => {
+            el.textContent = t === 'light' ? 'Light' : 'Dark';
         });
-    });
+    };
+    applyTheme(stored || preferred);
+    document.querySelectorAll('[data-theme-toggle]').forEach(btn =>
+        btn.addEventListener('click', () =>
+            applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark')
+        )
+    );
 
-    // ── Lightweight mode ────────────────────────────────────────────
-    // Priority: localStorage (user preference) → server-side meta default → off
+    // ── Lightweight mode ───────────────────────────────────────────
     const lwMeta = document.querySelector('meta[name="pltx-lightweight"]');
-    const lwServerDefault = lwMeta?.getAttribute('content') === 'true';
-    const lwStored = localStorage.getItem('pltx-lightweight-mode');
-    const lwInitial = lwStored !== null ? lwStored === 'true' : lwServerDefault;
-
-    const lwLabel = document.getElementById('lw-label');
-
-    const applyLightweight = (enabled) => {
-        root.setAttribute('data-lightweight', enabled ? 'true' : 'false');
-        localStorage.setItem('pltx-lightweight-mode', enabled ? 'true' : 'false');
-        if (lwLabel) lwLabel.textContent = enabled ? 'On' : 'Off';
-
-        // Hide/show decorative elements that may have been server-rendered
-        document.querySelectorAll('.theme-bg, .theme-grid').forEach((el) => {
-            el.style.display = enabled ? 'none' : '';
+    const lwDefault = lwMeta?.getAttribute('content') === 'true';
+    const lwStored  = localStorage.getItem('pltx-lightweight-mode');
+    const applyLw = (on) => {
+        root.setAttribute('data-lightweight', on ? 'true' : 'false');
+        localStorage.setItem('pltx-lightweight-mode', on ? 'true' : 'false');
+        document.querySelectorAll('[data-lw-label]').forEach(el => {
+            el.textContent = on ? 'On' : 'Off';
+        });
+        document.querySelectorAll('.theme-bg, .theme-grid').forEach(el => {
+            el.style.display = on ? 'none' : '';
         });
     };
+    applyLw(lwStored !== null ? lwStored === 'true' : lwDefault);
+    document.querySelectorAll('[data-lightweight-toggle]').forEach(btn =>
+        btn.addEventListener('click', () =>
+            applyLw(root.getAttribute('data-lightweight') !== 'true')
+        )
+    );
 
-    applyLightweight(lwInitial);
+    // ── Mobile sidebar toggle ──────────────────────────────────────
+    document.querySelectorAll('[data-sidebar-toggle]').forEach(btn =>
+        btn.addEventListener('click', () =>
+            document.querySelector('.sidebar')?.classList.toggle('sidebar--open')
+        )
+    );
 
-    document.querySelectorAll('[data-lightweight-toggle]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            applyLightweight(root.getAttribute('data-lightweight') !== 'true');
-        });
-    });
-
-    // ── Live data polling ───────────────────────────────────────────
-    const liveStatus = document.querySelector('[data-live-status]');
-    const liveUpdate = document.querySelector('[data-live-update]');
-
-    const refreshLiveData = async () => {
+    // ── Live data polling ──────────────────────────────────────────
+    const liveEl = (sel) => document.querySelector(sel);
+    const poll = async () => {
         try {
-            const [statusRes, updateRes] = await Promise.all([
-                fetch('/api/theme/status', { headers: { Accept: 'application/json' } }),
-                fetch('/api/theme/update',  { headers: { Accept: 'application/json' } }),
+            const prefix = window.__pltxApiPrefix || '/api/theme/v1';
+            const [sRes, uRes] = await Promise.all([
+                fetch(`${prefix}/status`, { headers: { Accept: 'application/json' } }),
+                fetch(`${prefix}/update`, { headers: { Accept: 'application/json' } }),
             ]);
-
-            if (liveStatus && statusRes.ok) {
-                liveStatus.textContent = (await statusRes.json()).status?.status ?? 'unknown';
+            if (sRes.ok) {
+                const d = await sRes.json();
+                const el = liveEl('[data-live-status]');
+                if (el) el.textContent = d.status?.status ?? d.status ?? 'operational';
             }
-            if (liveUpdate && updateRes.ok) {
-                const u = await updateRes.json();
-                liveUpdate.textContent = u.update_available ? `Update ${u.latest}` : 'Current';
+            if (uRes.ok) {
+                const d = await uRes.json();
+                const el = liveEl('[data-live-update]');
+                if (el) el.textContent = d.update_available ? `v${d.latest} verfügbar` : 'Aktuell';
             }
-        } catch {
-            // API unavailable — keep static rendering.
-        }
+        } catch (_) {}
     };
-
-    // Single fetch on load for all modes.
-    // Polling every 30 s is skipped in lightweight mode to reduce background CPU/network usage.
-    refreshLiveData();
-    if (!lwInitial) {
-        window.setInterval(refreshLiveData, 30_000);
+    if (!root.getAttribute('data-lightweight') || root.getAttribute('data-lightweight') === 'false') {
+        poll();
+        setInterval(poll, 60000);
     }
 })();

@@ -1,30 +1,47 @@
 @extends('pltx-theme::layouts.app')
 
-@section('page-title', 'Billing')
+@section('title', 'Abrechnung')
 
 @section('content')
-    <section class="page-header">
-        <h2>Billing-System</h2>
-        <p>Guthaben, Rechnungen, Transaktionsverlauf und Gutscheincodes.</p>
-    </section>
+<div class="page-header">
+    <h2>Abrechnung</h2>
+    <p>Konten, Transaktionen und Rechnungen.</p>
+</div>
 
-    <section class="card-grid">
-        @foreach($accounts as $account)
-            <article class="glass-card">
-                <span class="card-kicker">Account</span>
-                <h3>{{ $account->currency }} {{ number_format((float) $account->balance, 2, ',', '.') }}</h3>
-                <p>User #{{ $account->user_id ?? 'guest' }}</p>
-            </article>
-        @endforeach
-    </section>
+<div class="card-grid">
+    <div class="glass-card">
+        <div class="card-kicker">Konten</div>
+        <h3 style="margin:8px 0 4px; font-size:28px; font-weight:800;">{{ $accounts->count() }}</h3>
+        <p class="text-muted" style="margin:0; font-size:13px;">Aktive Konten</p>
+    </div>
+    <div class="glass-card">
+        <div class="card-kicker">Transaktionen</div>
+        <h3 style="margin:8px 0 4px; font-size:28px; font-weight:800;">{{ $transactions->count() }}</h3>
+        <p class="text-muted" style="margin:0; font-size:13px;">Letzte Transaktionen</p>
+    </div>
+    <div class="glass-card">
+        <div class="card-kicker">Rechnungen</div>
+        <h3 style="margin:8px 0 4px; font-size:28px; font-weight:800;">{{ $invoices->count() }}</h3>
+        <p class="text-muted" style="margin:0; font-size:13px;">Letzte Rechnungen</p>
+    </div>
+</div>
 
-    <section class="card-grid">
-        @foreach($transactions as $transaction)
-            <article class="glass-card">
-                <span class="card-kicker">Transaktion</span>
-                <h3>{{ $transaction->type }}</h3>
-                <p>{{ $transaction->provider ?? 'system' }} · {{ number_format((float) $transaction->amount, 2, ',', '.') }}</p>
-            </article>
-        @endforeach
-    </section>
+<div class="pltx-card">
+    <div class="pltx-card__header">Letzte Transaktionen</div>
+    <table class="pltx-table">
+        <thead><tr><th>#</th><th>Typ</th><th>Betrag</th><th>Datum</th></tr></thead>
+        <tbody>
+            @forelse($transactions as $tx)
+            <tr>
+                <td class="text-muted">#{{ $tx->id }}</td>
+                <td>{{ $tx->type }}</td>
+                <td>{{ number_format((float)$tx->amount, 2, ',', '.') }} €</td>
+                <td class="text-muted">{{ $tx->created_at?->format('d.m.Y H:i') }}</td>
+            </tr>
+            @empty
+            <tr><td colspan="4" style="text-align:center; padding:32px; color:var(--pltx-text-muted);">Keine Transaktionen vorhanden.</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 @endsection
